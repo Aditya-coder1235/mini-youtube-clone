@@ -60,28 +60,28 @@ const VideoById = () => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen p-6 flex justify-center">
+        <div className="bg--100 min-h-screen p-6 flex justify-center">
             <div className="w-full max-w-5xl flex flex-col gap-6">
                 {video && (
-                    <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div className="bg- rounded-xl shadow-md overflow-hidden">
                         <video
                             src={`http://localhost:8080${video.videoUrl}`}
                             controls
-                            className="w-full h-96 object-cover rounded-md bg-black"
+                            className="w-full h-96 object-cover rounded-md bg-"
                         />
 
                         <div className="p-5 space-y-3">
-                            <h1 className="text-xl font-semibold text-gray-900">
+                            <h1 className="text-xl font-semibold text--900">
                                 {video.title}
                             </h1>
 
-                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <div className="flex items-center gap-4 text-sm text--600">
                                 <span>•</span>
                                 <span>{likesCount} likes</span>
 
                                 <button
                                     onClick={handleLike}
-                                    className="ml-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                                    className="ml-4 px-3 py-1 bg-blue-500 text- rounded hover:bg-blue-600 transition"
                                 >
                                  Like
                                 </button>
@@ -89,15 +89,15 @@ const VideoById = () => {
 
                             <hr />
 
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text--700 leading-relaxed">
                                 {video.description}
                             </p>
                         </div>
                     </div>
                 )}
 
-                <div className="bg-white rounded-xl shadow-md p-5 space-y-4">
-                    <h2 className="text-lg font-semibold text-gray-800">
+                <div className="bg- rounded-xl shadow-md p-5 space-y-4">
+                    <h2 className="text-lg font-semibold text--800">
                         Comments
                     </h2>
 
@@ -107,11 +107,11 @@ const VideoById = () => {
                             placeholder="Add a comment..."
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            className="flex-1 border-b border-gray-300 focus:outline-none focus:border-gray-600 py-2"
+                            className="flex-1 border-b border--300 focus:outline-none focus:border-gray-600 py-2"
                         />
                         <button
                             type="submit"
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                            className="bg-blue-600 text- px-4 py-2 rounded-md hover:bg-blue-700 transition"
                         >
                             Comment
                         </button>

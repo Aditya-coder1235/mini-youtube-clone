@@ -3,3 +3,9 @@
 button{
     cursor: pointer !important;
 }
+
+body{
+    overflow-x: hidden;
+    background-color: black;
+    color: white;
+}

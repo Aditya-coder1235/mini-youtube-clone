@@ -1,12 +1,25 @@
-import React from 'react'
+import React from "react";
 
 const Footer = () => {
-  return (
-      <div className="flex flex-col justify-center items-center  bg-black text-white h-24">
-          <div>&copy; @myyou-tube</div>
-          <div>privacy || About</div>
-      </div>
-  );
-}
+    return (
+        <footer className="w-full bg-gray-900 text-gray-400 py-4 h-30">
+            <div className="flex flex-col items-center gap-1 text-sm">
+                <p>© {new Date().getFullYear()} MyYouTube</p>
 
-export default Footer
+                <div className="flex gap-4">
+                    <span className="hover:text-white cursor-pointer">
+                        About
+                    </span>
+                    <span className="hover:text-white cursor-pointer">
+                        Privacy
+                    </span>
+                    <span className="hover:text-white cursor-pointer">
+                        Terms
+                    </span>
+                </div>
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;

@@ -31,7 +31,7 @@ const AllVideos = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="flex flex-wrap gap-6 justify-center pt-10 pb-10">
+        <div className="flex flex-wrap gap-6 justify-center pt-5 pb-10">
             {videos.map((video) => {
                 return <VideoCard key={video._id} video={video} />;
             })}

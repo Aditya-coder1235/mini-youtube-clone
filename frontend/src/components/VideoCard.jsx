@@ -7,7 +7,7 @@ const VideoCard = ({ video }) => {
 
     return (
         <div
-            className="w-96 bg-white rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer "
+            className="w-96  rounded-2xl shadow-sm hover:shadow-md transition cursor-pointer "
             onClick={() => navigate(`/video/${video._id}`)}
         >
             <div className="relative">
@@ -19,15 +19,15 @@ const VideoCard = ({ video }) => {
             </div>
 
             <div className="p-3 space-y-2">
-                <h3 className="font-semibold text-gray-900 line-clamp-2">
+                <h3 className="font-semibold  line-clamp-2">
                     {video.title}
                 </h3>
 
-                <p className="text-sm text-gray-600 line-clamp-2">
+                <p className="text-sm  line-clamp-2">
                     {video.description}
                 </p>
 
-                <div className="flex items-center gap-4 text-sm text-gray-500 mt-2">
+                <div className="flex items-center gap-4 text-sm  mt-2">
                     {/* <div className="flex items-center gap-1">
                         <Eye size={16} />
                         <span>{video.views} views</span>

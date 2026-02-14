@@ -12,7 +12,7 @@ import VideoById from "./components/VideoById";
 
 const App = () => {
     return (
-        <div className="">
+        <div className="bg-black">
             <NavBar />
             <Routes>
                 <Route element={<ProtectedRoutes />}>

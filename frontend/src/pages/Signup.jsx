@@ -20,7 +20,7 @@ const Signup = () => {
             alert("User signup successful");
             navigate("/login");
         } catch (error) {
-            alert("All fields are required");
+            alert("Something went wrong");
         }
     }
 

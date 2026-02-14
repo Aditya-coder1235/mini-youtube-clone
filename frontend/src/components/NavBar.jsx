@@ -26,38 +26,61 @@ const NavBar = () => {
     }
 
     return (
-        <nav className="sticky top-0 z-50 bg-white  shadow-sm">
+        <nav
+            className="  "
+            // style={{ backgroundColor: "#303030" }}
+        >
             <div className="flex items-center justify-between px-6 py-2">
                 <Link to="/" className="flex items-center gap-2">
-                    <img src="/youtube.png" alt="YouTube" className="h-13" />
+                    <img
+                        src="/youtubeClone.png"
+                        alt="YouTube"
+                        className="h-18"
+                    />
                 </Link>
 
-                <div className="flex items-center w-[40%]">
+                <div className="relative w-full md:w-[40%]">
+                    <Search
+                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                        size={18}
+                    />
+
                     <input
                         type="text"
                         placeholder="Search"
-                        className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-1 focus:ring-gray-400"
+                        className="
+            w-full
+            h-10
+            pl-12
+            pr-4
+            py-2
+            border
+            rounded-full
+            focus:outline-none
+            focus:ring-1
+            focus:ring-gray-400
+        "
                     />
                 </div>
 
                 <div className="flex items-center gap-4">
                     <Link
                         to="/upload"
-                        className="px-4 py-2 border rounded-full hover:bg-gray-100 font-medium"
+                        className="px-4 py-2  rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
                     >
                         Upload
                     </Link>
 
                     <Link
                         to="/signup"
-                        className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200"
+                        className="px-4 py-2 rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
                     >
                         Signup
                     </Link>
 
                     <Link
                         to="/login"
-                        className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200"
+                        className="px-4 py-2 rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
                     >
                         Login
                     </Link>

@@ -6,7 +6,7 @@ exports.createComment = async (req, res) => {
         let { text } = req.body;
         let { id } = req.params
         let userId=req.user
-        let newComment = new Comment({ text ,userId:userId.id})
+        let newComment = new Comment({ text ,userId:userId.idnpm })
 
 
         let video = await Video.findByIdAndUpdate(id, { comments: newComment.id })
