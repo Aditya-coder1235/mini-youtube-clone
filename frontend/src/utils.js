@@ -1,4 +1,4 @@
-export const API = "http://localhost:8081";
+export const API = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
 export const mediaUrl = (path) => (path ? `${API}${path}` : "");
 

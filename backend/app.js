@@ -23,8 +23,12 @@ main().then(()=>console.log("Connect to db"))
 .catch((err)=>console.error(err));
 
 app.use(express.json())
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+    .split(",")
+    .map(o => o.trim());
+
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
 }));
