@@ -1,101 +1,140 @@
-import React from "react";
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Loader2, Lock, Mail, User } from "lucide-react";
+import AuthShell from "../components/AuthShell";
+import { useToast } from "../components/Toast";
+import { API } from "../utils";
 
 const Signup = () => {
-    const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
+  const navigate = useNavigate();
+  const toast = useToast();
+  const [showPass, setShowPass] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-    async function signupUser() {
-        try {
-            let res = await axios.post(
-                "http://localhost:8080/api/auth/signup",
-                formData
-            );
-            alert("User signup successful");
-            navigate("/login");
-        } catch (error) {
-            alert("Something went wrong");
-        }
+  async function signupUser() {
+    setBusy(true);
+    try {
+      await axios.post(`${API}/api/auth/signup`, formData);
+      toast.success("Account created — go ahead and sign in!");
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setBusy(false);
     }
+  }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        signupUser();
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signupUser();
+  };
 
-    const handleOnchange = (e) => {
-        let { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
+  const handleOnchange = (e) => {
+    const { name, value } = e.target;
+    setFormData((f) => ({ ...f, [name]: value }));
+  };
 
-    return (
-        <div className="min-h-screen bg-[#] flex items-center justify-center">
-            <form
-                onSubmit={handleSubmit}
-                className="bg-[#] p-8 rounded-xl w-96 shadow-lg"
+  const fields = [
+    {
+      id: "name",
+      label: "Username",
+      type: "text",
+      icon: User,
+      placeholder: "Your display name",
+      autoComplete: "name",
+    },
+    {
+      id: "email",
+      label: "Email",
+      type: "email",
+      icon: Mail,
+      placeholder: "you@example.com",
+      autoComplete: "email",
+    },
+    {
+      id: "password",
+      label: "Password",
+      type: showPass ? "text" : "password",
+      icon: Lock,
+      placeholder: "At least 6 characters",
+      autoComplete: "new-password",
+    },
+  ];
+
+  return (
+    <AuthShell
+      title="Create your account"
+      subtitle="Start uploading and building your audience today."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link to="/login" className="font-semibold text-plasma-300 hover:text-plasma-200">
+            Sign in
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {fields.map(({ id, label, type, icon: Icon, placeholder, autoComplete }) => (
+          <div key={id}>
+            <label
+              htmlFor={id}
+              className="mb-1.5 block text-xs font-semibold tracking-wide text-mist-400 uppercase"
             >
-                <h2 className="text-black text-2xl font-semibold text-center mb-6">
-                    Create your account
-                </h2>
-
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleOnchange}
-                    placeholder="Username"
-                    className="w-full mb-4 p-3 rounded-md bg-[#] text-black border border-gray-700 focus:outline-none focus:border-red-600"
-                    required
-                />
-
-                <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleOnchange}
-                    placeholder="Email"
-                    className="w-full mb-4 p-3 rounded-md bg-[#] text-black border border-gray-700 focus:outline-none focus:border-red-600"
-                    required
-                />
-
-                <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleOnchange}
-                    placeholder="Password"
-                    className="w-full mb-6 p-3 rounded-md bg-[#] text-black border border-gray-700 focus:outline-none focus:border-red-600"
-                    required
-                />
-
+              {label}
+            </label>
+            <div className="relative">
+              <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-mist-500">
+                <Icon size={16} />
+              </span>
+              <input
+                id={id}
+                type={type}
+                name={id}
+                autoComplete={autoComplete}
+                value={formData[id]}
+                onChange={handleOnchange}
+                placeholder={placeholder}
+                className={`input-field ${id === "password" ? "pr-11 pl-11" : "pl-11"}`}
+                required
+              />
+              {id === "password" && (
                 <button
-                    type="submit"
-                    className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-md transition"
+                  type="button"
+                  onClick={() => setShowPass((s) => !s)}
+                  aria-label={showPass ? "Hide password" : "Show password"}
+                  className="absolute top-1/2 right-4 -translate-y-1/2 text-mist-500 transition hover:text-mist-200"
                 >
-                    Sign Up
+                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
+              )}
+            </div>
+          </div>
+        ))}
 
-                <p className="text-gray-400 text-sm text-center mt-4">
-                    Already have an account?{" "}
-                    <span
-                        onClick={() => navigate("/login")}
-                        className="text-red-500 cursor-pointer hover:underline"
-                    >
-                        Login
-                    </span>
-                </p>
-            </form>
-        </div>
-    );
+        <button
+          type="submit"
+          disabled={busy}
+          className="btn-primary h-12 w-full disabled:opacity-60"
+        >
+          {busy ? (
+            <>
+              <Loader2 size={16} className="animate-spin" /> Creating account…
+            </>
+          ) : (
+            "Create account"
+          )}
+        </button>
+      </form>
+    </AuthShell>
+  );
 };
 
 export default Signup;

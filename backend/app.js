@@ -5,7 +5,7 @@ const port=process.env.PORT;
 const mongoose=require('mongoose');
 const path = require("path");
 
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 
 
@@ -42,5 +42,5 @@ app.use('/api/comment', commentRouter)
 
 
 app.listen(port,()=>{
-    console.log("server start at 8080 port");
+    console.log(`server start at ${port} port`);
 });

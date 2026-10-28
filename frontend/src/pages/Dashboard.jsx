@@ -1,12 +1,9 @@
-import React from 'react'
-import AllVideos from './AllVideos'
+import AllVideos from "./AllVideos";
 
-const Dashboard = () => {
-  return (
-    <div className=''>
-        <AllVideos/>
-    </div>
-  )
-}
+const Dashboard = () => (
+  <div>
+    <AllVideos />
+  </div>
+);
 
-export default Dashboard
+export default Dashboard;

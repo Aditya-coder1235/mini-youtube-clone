@@ -1,100 +1,133 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Search, Menu, Upload, Bell, X } from "lucide-react";
+import Logo from "./Logo";
 
-const NavBar = () => {
-    const navigate = useNavigate();
+const NavBar = ({ onMenuToggle }) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const urlQuery = searchParams.get("q") || "";
+  const [query, setQuery] = useState(urlQuery);
+  const [lastUrlQuery, setLastUrlQuery] = useState(urlQuery);
+  const [scrolled, setScrolled] = useState(false);
+  const inputRef = useRef(null);
+  const token = localStorage.getItem("token");
 
-    async function logoutUser() {
-        try {
-            await axios.post(
-                "http://localhost:8080/api/auth/logout",
-                {},
-                { withCredentials: true }
-            );
+  if (urlQuery !== lastUrlQuery) {
+    setLastUrlQuery(urlQuery);
+    setQuery(urlQuery);
+  }
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("role");
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-            navigate("/login");
-            alert("Logged out successfully");
-        } catch (error) {
-            console.error(error);
-            alert("Logout failed. Please try again.");
-        }
-    }
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+      if (e.key === "Escape") inputRef.current?.blur();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-    return (
-        <nav
-            className="  "
-            // style={{ backgroundColor: "#303030" }}
+  const submitSearch = (e) => {
+    e.preventDefault();
+    const q = query.trim();
+    navigate(q ? `/?q=${encodeURIComponent(q)}` : "/");
+    inputRef.current?.blur();
+  };
+
+  return (
+    <header
+      className={`sticky top-0 z-30 transition-all duration-300 ${
+        scrolled
+          ? "glass-strong shadow-[0_12px_40px_-16px_rgba(0,0,0,0.9)]"
+          : "bg-void-950/60 backdrop-blur-md"
+      }`}
+    >
+      <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
+        <button
+          onClick={onMenuToggle}
+          aria-label="Toggle menu"
+          className="grid h-10 w-10 place-items-center rounded-xl text-mist-300 transition hover:bg-void-700 hover:text-white lg:hidden"
         >
-            <div className="flex items-center justify-between px-6 py-2">
-                <Link to="/" className="flex items-center gap-2">
-                    <img
-                        src="/youtubeClone.png"
-                        alt="YouTube"
-                        className="h-18"
-                    />
-                </Link>
+          <Menu size={20} />
+        </button>
 
-                <div className="relative w-full md:w-[40%]">
-                    <Search
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                        size={18}
-                    />
+        <Link to="/" className="shrink-0 lg:hidden">
+          <span className="hidden sm:block">
+            <Logo />
+          </span>
+          <span className="sm:hidden">
+            <Logo size={30} />
+          </span>
+        </Link>
 
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="
-            w-full
-            h-10
-            pl-12
-            pr-4
-            py-2
-            border
-            rounded-full
-            focus:outline-none
-            focus:ring-1
-            focus:ring-gray-400
-        "
-                    />
-                </div>
+        <form onSubmit={submitSearch} className="mx-auto w-full max-w-xl">
+          <div className="group relative flex items-center">
+            <span className="pointer-events-none absolute left-4 text-mist-500 transition-colors group-focus-within:text-plasma-400">
+              <Search size={17} />
+            </span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search videos…"
+              aria-label="Search videos"
+              className="input-field h-11 w-full rounded-full pr-20 pl-11"
+            />
+            {query ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  navigate("/");
+                }}
+                aria-label="Clear search"
+                className="absolute right-4 text-mist-500 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            ) : (
+              <kbd className="pointer-events-none absolute right-3 hidden rounded-md border border-white/10 bg-void-700/70 px-2 py-0.5 font-sans text-[11px] text-mist-500 sm:block">
+                Ctrl K
+              </kbd>
+            )}
+          </div>
+        </form>
 
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/upload"
-                        className="px-4 py-2  rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
-                    >
-                        Upload
-                    </Link>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <button
+            aria-label="Notifications"
+            className="relative hidden h-10 w-10 place-items-center rounded-xl text-mist-300 transition hover:bg-void-700 hover:text-white sm:grid"
+          >
+            <Bell size={18} />
+            <span className="absolute top-2 right-2.5 h-1.5 w-1.5 rounded-full bg-ember-400 shadow-[0_0_8px_2px_rgba(255,77,109,0.8)]" />
+          </button>
 
-                    <Link
-                        to="/signup"
-                        className="px-4 py-2 rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
-                    >
-                        Signup
-                    </Link>
+          {token ? (
+            <Link to="/upload" className="btn-primary h-10 px-4 text-sm">
+              <Upload size={16} />
+              <span className="hidden md:inline">Upload</span>
+            </Link>
+          ) : (
+            <Link to="/login" className="btn-primary h-10 px-4 text-sm">
+              Sign in
+            </Link>
+          )}
+        </div>
+      </div>
 
-                    <Link
-                        to="/login"
-                        className="px-4 py-2 rounded-full h-10 hover:text-black hover:bg-gray-100 font-medium"
-                    >
-                        Login
-                    </Link>
-
-                    <button
-                        onClick={logoutUser}
-                        className="px-4 py-2 rounded-full bg-red-500 text-white hover:bg-red-600"
-                    >
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </nav>
-    );
+      <div className="h-px bg-gradient-to-r from-transparent via-plasma-500/40 to-transparent" />
+    </header>
+  );
 };
 
 export default NavBar;
